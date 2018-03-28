@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "687158063272",
+    "firebase_url": "https://personalcoach-a65d0.firebaseio.com",
+    "project_id": "personalcoach-a65d0",
+    "storage_bucket": "personalcoach-a65d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687158063272:android:6351a75dcbfc90e1",
+        "android_client_info": {
+          "package_name": "com.example.kate.personal_coach"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "687158063272-a8hghhmr59cqd492id23cbheb304nf3t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kate.personal_coach",
+            "certificate_hash": "1a7ec000d46000eaf0c23d9704fdf7abedc5459f"
+          }
+        },
+        {
+          "client_id": "687158063272-r3f8ct378jtmuldmhmrit0aadukqngcp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3ADqEXjQYVzBu_mh6XdSAISMnlyeDcvY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "687158063272-r3f8ct378jtmuldmhmrit0aadukqngcp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
