@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name = "bloodTime">
+
+        <item> 공복 </item>
+        <item> 아침 식전 </item>
+        <item> 아침 식후 </item>
+        <item> 점심 식전 </item>
+        <item> 점심 식후 </item>
+        <item> 저녁 식전 </item>
+        <item> 저녁 식후 </item>
+        <item> 자기전 </item>
+
+
+    </string-array>
+
+</resources>
