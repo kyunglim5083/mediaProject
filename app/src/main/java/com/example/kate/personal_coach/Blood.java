@@ -2,6 +2,9 @@ package com.example.kate.personal_coach;
 
 import android.text.Editable;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 /**
  * Created by imsoyeong on 2018. 4. 7..
  */
@@ -44,7 +47,7 @@ public class Blood {
     public void setBlood_data(int blood_data) {
         this.blood_data = blood_data;
     }
-
+    // Get a reference to our posts
 
 
 }
