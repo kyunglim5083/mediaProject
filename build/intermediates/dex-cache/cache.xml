@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/kate/Desktop/personal_coach/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_ccd7e6ddb89679775ffd2c4cf2df34822030758f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.gradle/caches/modules-2/files-2.1/android.arch.core/common/1.0.0/a2d487452376193fc8c103dd2b9bd5f2b1b44563/common-1.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="a2d487452376193fc8c103dd2b9bd5f2b1b44563">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/common-1.0.0_514236578b933d2ee7af69b7347408fec5191d65/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.gradle/caches/modules-2/files-2.1/android.arch.lifecycle/common/1.0.0/e414a4cb28434e25c4f6aa71426eb20cf4874ae9/common-1.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="e414a4cb28434e25c4f6aa71426eb20cf4874ae9">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/common-1.0.0_11d930bc0047385491b427dc2dab192e9e1059cd/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/399e1875c03a5be4a39853c923174b0164652d9d/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="2442771a5590dd4eb4bce00c2e9dca9e22e4c963">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_8c95751d3a3ec41d95d493d8e70df355069cf8e5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/502c94839b3967341d4392376d4e987566e3a9c2/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="869a1d15fa9d8e8aa36587b042f553c1baea46bc">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_bd7182fbf0fefd5471b39034ceb7f0cc56e889d3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/00320424bad9cb2438a41b191a6ae34e9cd2861f/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="f428e2fbc9ed0b297e3a3f420e51e6982f66822d">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_5c3c9e9e524ee2e1bf30a78129146e037b257331/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/f572d4907573e0e17d998c5eda055408ecd2a999/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="b62fdc4cfef174c1e456014195c83fa7de7dc041">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_571f68cc59807b3b7473ddedd068859d584a840d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/b7d3f045c8ff9025e28de7caa99b7f265493017a/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="d6399340139f67ce4faba06e97f256ef0d6817c0">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_5b046e1fbed2c90e7e7438f19d98d429e43bd7ee/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/9ecea3174f28800661abf40c40410605138b2b94/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="f97cf85b0fe70d37a705111dafa6b1b418ea1650">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_4264e6f98d3dadf85b0f5fd81f39d9d6bad9dd34/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/cded9cb19b10a793d0e1a64bb492ec97014cb58a/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="508f50705b4fde51a16259f29c854201a3044516">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_8dcdc7ca9f182f848af4117fdf25c41f62cb6e41/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/9be8be80e5071d18bcdf16320e24f5befa636d8f/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="e9b8fd995f9c6c2caeb49827f0b52e0e8cc621e0">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_c253c8f73b3219cd63a2694f807d86e25126d4a7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/2004b4cdf3421b9f329f4acc40935fe7621d78e3/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="863b37c463df79f340b5d83bbbfc63ad25612e01">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_400bcc2a01ad03b487e0f7d4f463e3bb2dd5e00c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/216bec5f5bad487bd38534c574f5358b8a765846/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="d6ff091e2c6df07894e5b921671404047d70d3f7">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_b8417f70c18e8c9e8ad61cea72ac994a538164e0/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/3b28d3bee12aecc6bd52c927ed436ed87e6955b9/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="cd1ff651ddb8608e9c4037f3d9ab475e9472abb2">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_de36d02d63d2288d34e41c29a6c4d7a6d76f3bd7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/e968f1e378d8c0c0a47c592c3ef0c2cc2304c14b/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="d90cb9610620b7631c75f1953a4956810edd4bed">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_7a40cb8cdbe0d7a80d1169e714787513f5decc55/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/be6be237dc5f2e2c490c3308839b00fda5933b6f/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="40392f30a601db5675cdf18192aab013d6fee6ec">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_52ac1b97d560da32950fbffc8b9444efced0adf1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/d25985659fa0893466b98b430b76c2cba32906a5/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_3f10627f543d6b304d325f6065d3b72bf02cbd95/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/381eab462fb95a99d6c7d7f09f94d3be6686867b/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="233f60a165ae622c8b36731502ebbda0f65e1930">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_3c3de351296f3664136a8c15de2523bbbde1ff6d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/0b277eceb31126528dbcd03141cd62b1b22c8f61/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="da443aff9cd3c2cd75b957e0547e1ca2c4f30308">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_6a599866126955df5b7da03900c0610802dc4e65/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/755abcc9ae6a294524a35ced6542e803ee3d3af3/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="e4a9d8510de319af17459d3ec70e23559b83495b">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_81e2123b70ca2c448d9ea241e5233e22c8d52bdb/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/Desktop/personal_coach/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="9267f758e264f5d18f6014dc2eff57bccbd9b6f6">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_445e48181bc5774d7d319ff9caec95a976393f91/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/9d4879f92eb41333299e687f3146412aff037d8d/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="1cde19cbf9be88547ab4b7f03668eac5d91bd611">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_090527477276dc8134b0e4d7e71055d92fa87ec1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/75d8841dcc13542dc98b8af5e34a21847b7113f2/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="47bcd0b3eac50dbe2f150987250a6507e10ef28a">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_00b706d12d2829b722590eef129d05eef0558a0e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.gradle/caches/modules-2/files-2.1/com.android.support/support-annotations/26.1.0/814258103cf26a15fcc26ecce35f5b7d24b73f8/support-annotations-26.1.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="0814258103cf26a15fcc26ecce35f5b7d24b73f8">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-26.1.0_cb3dfc1529375ca9c101bb8739d08a111a8e0286/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/24aca824b08e713a4d094a5d3414b2be31b4359b/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="7efef32744ca4a436492d5cf28c08698cc2af256">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_f3bd1d5729dd44ffd8e0e79525bccf4ade0873cf/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/37f48e9b658530b8fee8f98f0663833b22f00301/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="6f4138a4e065826cb044d49faea4cfd7191773d1">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_c25fb0dc1c4d32468119895bf6939a13bc60a65b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/c71dfa948604bd25007848152aba6086e8982a7f/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="269771e258a0d07bc8f5213f1f5ed77e8f42d72f">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_cbc69cdc94264d9fb726b9ab33a5e0499779cfcb/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/kate/.android/build-cache/38fcc04302c3052ff851b85cef9b4784cd9ea69f/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="27.0.2"
+        sha1="729a6a1975c19d7461378172c7932f5c57f1c3fe">
+        <dex dex="/Users/kate/Desktop/personal_coach/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_655d455a560cfb33d41b6ec129b68d995ab44cdc/classes.dex" />
+    </item>
+
+</items>

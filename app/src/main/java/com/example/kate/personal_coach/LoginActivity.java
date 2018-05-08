@@ -1,12 +1,7 @@
 package com.example.kate.personal_coach;
 
-import android.os.Bundle;
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +21,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -76,14 +73,14 @@ public class LoginActivity extends BaseActivity implements
         mAuth = FirebaseAuth.getInstance();
 
     }
-/*
+
 
     @Override
     public void onStart() {
         super.onStart();
 
     }
-*/
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -95,11 +92,11 @@ public class LoginActivity extends BaseActivity implements
 
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                Log.d("here","here");
+
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
-                Log.d("here22","here22");
+
 
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
@@ -122,6 +119,7 @@ public class LoginActivity extends BaseActivity implements
             Dlab_DB.child("User").child(user.getUid()).setValue(user_1);
             Toast.makeText(getApplicationContext(),"가입 성공!",Toast.LENGTH_LONG).show();
 
+            callGraphAct();
         }
     }
     // [END onactivityresult]
@@ -144,12 +142,12 @@ public class LoginActivity extends BaseActivity implements
                             Log.d(TAG, "signInWithCredential:success");
                             user = mAuth.getCurrentUser();
                             //Member DB에 입력
+                            Log.d("###########", user.getDisplayName()+" "+user.getEmail());
                             writeNewUser(user.getUid());
 
                             //버튼 교체
                             //updateUI(user);
-                            Intent intent  = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -248,7 +246,11 @@ public class LoginActivity extends BaseActivity implements
                     //회원 db에 등록
                     Intent intent=new Intent(LoginActivity.this,GetUserInfo.class);
                     startActivityForResult(intent,0);
+                }else{
+                    callGraphAct();
+
                 }
+
 
             }
 
@@ -260,6 +262,11 @@ public class LoginActivity extends BaseActivity implements
 
 
 
+    }
+    private void callGraphAct(){
+        //혈당 그래프 페이지로 이동
+        Intent intent  = new Intent(LoginActivity.this, BloodSugarG.class);
+        startActivity(intent);
     }
 
 
