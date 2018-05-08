@@ -78,6 +78,8 @@ public class FoodActivity extends AppCompatActivity implements View.OnClickListe
                 userFoodList.add(uFood);
                 totalCalory += uFood.getKcal();
             }
+
+            totalCalory = Double.parseDouble(String.format("%.2f",totalCalory));
             tv_totalCalory.setText(totalCalory+"");
             foodAdapter.notifyDataSetChanged();
         }
