@@ -22,14 +22,17 @@
         <activity android:name=".BloodActivity" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
+
+
+
         </activity>
         <activity android:name=".BloodSugarG">
             <intent-filter>
@@ -45,6 +48,7 @@
             android:name=".ActivityService"
             android:enabled="true"
             android:exported="true"></service>
+        <activity android:name=".FoodActivity"></activity>
     </application>
 
 </manifest>

@@ -322,7 +322,8 @@ public class LoginActivity extends BaseActivity implements
 
     private void callGraphAct(){
         //혈당 그래프 페이지(메인페이지)로 이동
-        Intent intent  = new Intent(LoginActivity.this, BloodSugarG.class);
+
+        Intent intent  = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
     }
 

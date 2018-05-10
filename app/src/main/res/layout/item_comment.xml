@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="20dp"
+            android:background="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="15dp">
+
+                <ImageView
+                    android:id="@+id/img_rc_type"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/blood_drop"
+                    android:layout_marginRight="5dp"/>
+
+                <TextView
+                    android:id="@+id/tv_rc_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:text="오늘의 혈당 관리!"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:layout_centerInParent="true"
+                android:background="#eeeeee"/>
+
+            <TextView
+                android:id="@+id/tv_rc_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:text="혈당이 규칙적이지 않다면, 매일 측정하는 것이 바람직합니다"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="35dp">
+
+
+                <ImageView
+                    android:id="@+id/page1"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/filled_circle"
+                    android:layout_marginRight="3dp"/>
+
+                <ImageView
+                    android:id="@+id/page2"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/dry"
+                    android:layout_marginRight="3dp"/>
+
+                <ImageView
+                    android:id="@+id/page3"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/dry"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
