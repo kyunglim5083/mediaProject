@@ -50,4 +50,12 @@ public class Blood {
     // Get a reference to our posts
 
 
+    @Override
+    public String toString() {
+        return "Blood{" +
+                "time='" + time + '\'' +
+                ", type='" + type + '\'' +
+                ", blood_data=" + blood_data +
+                '}';
+    }
 }

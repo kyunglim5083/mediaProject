@@ -1,5 +1,4 @@
 package com.example.kate.personal_coach;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -55,26 +54,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-
 //구글 로그인
 public class LoginActivity extends BaseActivity implements
-        View.OnClickListener,  GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, OnDataPointListener{
+        View.OnClickListener{
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
     public static DatabaseReference Dlab_DB;
 
-    private static final int REQUEST_OAUTH_REQUEST_CODE = 1;
-    private GoogleApiClient mClient;
+    private static final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1;
 
     private static final String AUTH_PENDING = "auth_state_pending";
     private boolean authInProgress = false;
@@ -82,14 +70,12 @@ public class LoginActivity extends BaseActivity implements
     static String sex;
     static int age,height,weight;
     // [START declare_auth]
-    private FirebaseAuth mAuth;
+    private static FirebaseAuth mAuth;
     // [END declare_auth]
     static FirebaseUser user=null;
 
     private GoogleSignInClient mGoogleSignInClient;
-    private ActivityService activityService;
-
-    DailyTotalResult resultcalories;
+    GoogleSignInAccount account;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,17 +129,16 @@ public class LoginActivity extends BaseActivity implements
             try {
 
                 // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
+                account = task.getResult(ApiException.class);
+                Log.i("account#####", account.toString());
                 firebaseAuthWithGoogle(account);
 
 
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.d("예외 ","예외");
+
                 e.printStackTrace();
-
-
-
                 // [START_EXCLUDE]
                 updateUI(null);
                 // [END_EXCLUDE]
@@ -170,12 +155,14 @@ public class LoginActivity extends BaseActivity implements
 
             callGraphAct();
         }
-
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_OAUTH_REQUEST_CODE) {
-                findFitnessDataSources();
+            if (requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
+                Intent intent = new Intent(getApplicationContext(),ActivityService.class); // 이동할 컴포넌트
+                startService(intent); // 서비스 시작
+                //googleFitData();
             }
         }
+
     }
     // [END onactivityresult]
 
@@ -303,13 +290,10 @@ public class LoginActivity extends BaseActivity implements
                     startActivityForResult(intent,0);
                 }else{
                     callGraphAct();
+                    getFitnessDate();
 
-                    startActivityService();
                 }
-
-
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -328,261 +312,40 @@ public class LoginActivity extends BaseActivity implements
     }
 
 
-    private void startActivityService(){
-        mAuth = FirebaseAuth.getInstance();
-        mClient = new GoogleApiClient.Builder(this)
-                .addApi(Fitness.HISTORY_API)
-                .addApi(Fitness.SENSORS_API)
-                .addApi(Fitness.RECORDING_API)
-                .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
-                .addScope(new Scope(Scopes.FITNESS_BODY_READ_WRITE))
-                .addScope(new Scope(Scopes.FITNESS_LOCATION_READ_WRITE))
-                .enableAutoManage(this, 0, this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
+
+    public void getFitnessDate(){
+
+        Log.i("getFitnessData", "in*********");
+
+        FitnessOptions fitnessOptions = FitnessOptions.builder()
+                .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+                .addDataType(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+
+                .addDataType(DataType.TYPE_ACTIVITY_SEGMENT, FitnessOptions.ACCESS_READ)
+                .addDataType(DataType.AGGREGATE_ACTIVITY_SUMMARY, FitnessOptions.ACCESS_READ)
+
+                .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
+                .addDataType(DataType.AGGREGATE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
                 .build();
 
-        DataSourcesRequest dataSourceRequest = new DataSourcesRequest.Builder()
-                .setDataTypes( DataType.TYPE_STEP_COUNT_CUMULATIVE, DataType.TYPE_CALORIES_EXPENDED)
-                .setDataSourceTypes( DataSource.TYPE_RAW )
-                .build();
-
-
-
-        ResultCallback<DataSourcesResult> dataSourcesResultCallback = new ResultCallback<DataSourcesResult>() {
-            @Override
-            public void onResult(DataSourcesResult dataSourcesResult) {
-                for( DataSource dataSource : dataSourcesResult.getDataSources() ) {
-                    if( DataType.TYPE_STEP_COUNT_CUMULATIVE.equals( dataSource.getDataType() ) ) {
-                        registerFitnessDataListener(dataSource, DataType.TYPE_STEP_COUNT_CUMULATIVE);
-                    }else if(DataType.TYPE_CALORIES_EXPENDED.equals(dataSource.getDataType())){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_CALORIES_EXPENDED);
-                    }
-                }
-            }
-        };
-
-
-
-        Fitness.SensorsApi.findDataSources(mClient, dataSourceRequest)
-                .setResultCallback(dataSourcesResultCallback);
-
-        if (hasRuntimePermissions()) {
-            findFitnessDataSourcesWrapper();
+        if (!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(this), fitnessOptions)) {
+            GoogleSignIn.requestPermissions(
+                            this, // your activity
+                            GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,
+                            GoogleSignIn.getLastSignedInAccount(this),
+                    fitnessOptions);
         } else {
-            requestRuntimePermissions();
+            Log.i("getFitnessData", "Service*********");
+            Intent intent = new Intent(getApplicationContext(),ActivityService.class); // 이동할 컴포넌
+
+            startService(intent); // 서비스 시작
+            //googleFitData();
         }
 
 
 
 
-        Intent intent = new Intent(LoginActivity.this,ActivityService.class);
-        startService(intent);
 
-
-    }
-
-
-    private void registerFitnessDataListener(DataSource dataSource, DataType dataType) {
-        SensorRequest request = new SensorRequest.Builder()
-                .setDataSource( dataSource )
-                .setDataType( dataType )
-                .setSamplingRate( 3, TimeUnit.SECONDS )
-                .build();
-
-        Fitness.SensorsApi.add( mClient, request, this )
-                .setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        if (status.isSuccess()) {
-                            Log.e( "GoogleFit", "SensorApi successfully added" );
-                        }
-                    }
-                });
-    }
-    private void requestRuntimePermissions() {
-        boolean shouldProvideRationale =
-                ActivityCompat.shouldShowRequestPermissionRationale(
-                        this, android.Manifest.permission.ACCESS_FINE_LOCATION);
-    }
-    private void findFitnessDataSourcesWrapper() {
-        if (hasOAuthPermission()) {
-            findFitnessDataSources();
-        } else {
-            requestOAuthPermission();
-        }
-    }
-    private void findFitnessDataSources() {
-        DataSourcesRequest dataSourceRequest = new DataSourcesRequest.Builder()
-                .setDataTypes(DataType.TYPE_STEP_COUNT_CUMULATIVE)
-                .setDataTypes(DataType.TYPE_CALORIES_EXPENDED)
-                .setDataTypes(DataType.TYPE_STEP_COUNT_DELTA)
-                .setDataTypes(DataType.TYPE_LOCATION_SAMPLE)
-                .setDataTypes(DataType.TYPE_WORKOUT_EXERCISE)
-                .setDataTypes(DataType.TYPE_CYCLING_PEDALING_CUMULATIVE)
-                .setDataTypes(DataType.TYPE_DISTANCE_DELTA)
-                .setDataTypes(DataType.TYPE_HEART_RATE_BPM)
-                .setDataTypes(DataType.TYPE_ACTIVITY_SEGMENT)
-                .setDataSourceTypes( DataSource.TYPE_RAW )
-                .build();
-
-        ResultCallback<DataSourcesResult> dataSourcesResultCallback = new ResultCallback<DataSourcesResult>() {
-            @Override
-            public void onResult(DataSourcesResult dataSourcesResult) {
-                for( DataSource dataSource : dataSourcesResult.getDataSources() ) {
-                    if( DataType.TYPE_STEP_COUNT_CUMULATIVE.equals( dataSource.getDataType() ) ) {
-                        registerFitnessDataListener(dataSource, DataType.TYPE_STEP_COUNT_CUMULATIVE);
-                    }
-                    else if(DataType.TYPE_CALORIES_EXPENDED.equals(dataSource.getDataType())){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_CALORIES_EXPENDED);
-                    }
-                    else if(DataType.TYPE_STEP_COUNT_DELTA.equals( dataSource.getDataType() )){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_STEP_COUNT_DELTA);
-                    }else if(DataType.TYPE_LOCATION_SAMPLE.equals( dataSource.getDataType() )){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_LOCATION_SAMPLE);
-                    }else if(DataType.TYPE_WORKOUT_EXERCISE.equals( dataSource.getDataType() )){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_WORKOUT_EXERCISE);
-                    }else if(DataType.TYPE_CYCLING_PEDALING_CUMULATIVE.equals( dataSource.getDataType() )){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_CYCLING_PEDALING_CUMULATIVE);
-                    }else if(DataType.TYPE_DISTANCE_DELTA.equals( dataSource.getDataType() )){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_DISTANCE_DELTA);
-                    }else if(DataType.TYPE_HEART_RATE_BPM.equals( dataSource.getDataType() )){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_HEART_RATE_BPM);
-                    }else if(DataType.TYPE_ACTIVITY_SEGMENT.equals( dataSource.getDataType() )){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_ACTIVITY_SEGMENT);
-                    }
-                }
-            }
-        };
-
-        Fitness.SensorsApi.findDataSources(mClient, dataSourceRequest)
-                .setResultCallback(dataSourcesResultCallback);
-
-    }
-
-    private FitnessOptions getFitnessSignInOptions() {
-        return FitnessOptions.builder()
-                .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE)
-                .addDataType(DataType.TYPE_CALORIES_EXPENDED)
-                .addDataType(DataType.TYPE_STEP_COUNT_DELTA)
-                .addDataType(DataType.TYPE_LOCATION_SAMPLE)
-                .addDataType(DataType.TYPE_WORKOUT_EXERCISE)
-                .addDataType(DataType.TYPE_CYCLING_PEDALING_CUMULATIVE)
-                .addDataType(DataType.TYPE_DISTANCE_DELTA)
-                .addDataType(DataType.TYPE_HEART_RATE_BPM)
-                .addDataType(DataType.TYPE_ACTIVITY_SEGMENT)
-                .build();
-    }
-    private boolean hasOAuthPermission() {
-        FitnessOptions fitnessOptions = getFitnessSignInOptions();
-        return GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(this), fitnessOptions);
-    }
-    private boolean hasRuntimePermissions() {
-        int permissionState =
-                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
-        return permissionState == PackageManager.PERMISSION_GRANTED;
-    }
-    private void requestOAuthPermission() {
-        FitnessOptions fitnessOptions = getFitnessSignInOptions();
-        GoogleSignIn.requestPermissions(
-                this,
-                REQUEST_OAUTH_REQUEST_CODE,
-                GoogleSignIn.getLastSignedInAccount(this),
-                fitnessOptions);
-    }
-
-
-
-    @Override
-    public void onDataPoint(DataPoint dataPoint) {
-        final String today = getDateStr();
-        final String time = getTimeStr();
-        final ActivityVO activityVO = new ActivityVO();
-
-        Log.i("DataPoint", ""+dataPoint.getDataSource());
-
-        DataSource dataSource = new DataSource.Builder()
-                .setAppPackageName(this)
-                .setDataType(DataType.TYPE_CALORIES_EXPENDED)
-                .setStreamName(TAG + " - calories")
-                .setType(DataSource.TYPE_RAW)
-                .build();
-
-        DataSet dataSet = DataSet.create(dataSource);
-
-
-        Calendar cal = Calendar.getInstance();
-        Date now = new Date();
-        cal.setTime(now);
-        long endTime = cal.getTimeInMillis();
-        cal.add(Calendar.DAY_OF_YEAR, -1);
-        long startTime = cal.getTimeInMillis();
-
-        Log.i("**************startTime", ""+startTime);
-        Log.i("**************endTime", ""+endTime);
-        ////////
-
-
-        DataPoint dataPoint2 = dataSet.createDataPoint()
-                .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS);
-        dataPoint2.getValue(Field.FIELD_CALORIES);
-        dataSet.add(dataPoint2);
-        /////////
-
-
-        Log.i("$$$$$$$$$readRequest", "test" + dataSet.getDataType().getFields().get(0).getName() + " " + dataPoint2.getValue(Field.FIELD_CALORIES));
-
-        activityVO.setKcal(Float.parseFloat(dataPoint2.getValue((Field.FIELD_CALORIES)).toString()));
-        for( final Field field : dataPoint.getDataType().getFields() ) {
-            dataPoint.setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS);
-            Value value = dataPoint.getValue( field );
-            Toast.makeText(getApplicationContext(), "field: " + field.getName() + " Value: " + value, Toast.LENGTH_SHORT).show();
-            Log.i("FitnessActivity", "TEST" + field.getName() + ": "+value);
-            activityVO.setTime(time);
-            if(field.getName() == "com.google.calories.expended")
-                activityVO.setKcal(value.asFloat());
-            else{
-                if(Dlab_DB.child("Activity").child(user.getUid()).child(today.replace("/", "")) == null){
-                    value.setInt(0);
-                }
-                activityVO.setStep(value.asInt());
-
-            }
-
-
-
-        }
-
-        user = mAuth.getCurrentUser();
-         Dlab_DB.child("Activity").child(user.getUid()).child(today.replace("/","")).setValue(activityVO);
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.e("HistoryAPI", "onConnectionSuspended");
-    }
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-        Log.e("HistoryAPI", "onConnected");
-    }
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e("HistoryAPI", "onConnectionFailed");
-    }
-    public String getDateStr(){
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-        SimpleDateFormat sdfNow = new SimpleDateFormat("MM/dd");
-        return sdfNow.format(date);
-    }
-
-    public String getTimeStr(){
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-        SimpleDateFormat sdfNow = new SimpleDateFormat("MM/dd HH:mm:ss");
-        return sdfNow.format(date);
     }
 
 
