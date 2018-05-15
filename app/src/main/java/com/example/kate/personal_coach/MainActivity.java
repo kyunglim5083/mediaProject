@@ -16,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
@@ -30,13 +31,17 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements OnChartGestureListener,
         OnChartValueSelectedListener{
@@ -48,8 +53,13 @@ public class MainActivity extends AppCompatActivity implements OnChartGestureLis
     private FloatingActionButton mFab, addBloodBtn, addFoodBtn;
 
     private DatabaseReference databaseReference;
+    private FirebaseAuth mAuth;
+    static FirebaseUser user = null;
     private ViewPagerAdapter pagerAdapter;
     private ViewPager viewPager;
+    private String currDate;
+
+    private ArrayList<Blood> userBlood;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +78,11 @@ public class MainActivity extends AppCompatActivity implements OnChartGestureLis
         mChart.setOnChartValueSelectedListener(this);
         //------------------------- 그래프 밑에 채우는거 -----------------------------
         mChart.setDrawGridBackground(false);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        userBlood = new ArrayList<>();
 
         // add data
         setData();
@@ -128,8 +143,6 @@ public class MainActivity extends AppCompatActivity implements OnChartGestureLis
 
         //  dont forget to refresh the drawing
         mChart.invalidate();
-
-        databaseReference = FirebaseDatabase.getInstance().getReference("Recommend_Comment");
 
         //추천 pager adapter
         viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -215,11 +228,15 @@ public class MainActivity extends AppCompatActivity implements OnChartGestureLis
     //------------------------- x좌표값 -----------------------------
     private ArrayList<String> setXAxisValues(){
         xVals = new ArrayList<String>();
-        xVals.add("공복");
-        xVals.add("아침 후");
-        xVals.add("점심 후");
-        xVals.add("저녁 후");
-        xVals.add("자기 전");
+//        xVals.add("공복");
+//        xVals.add("아침 후");
+//        xVals.add("점심 후");
+//        xVals.add("저녁 후");
+//        xVals.add("자기 전");
+
+        for (int i=0; i<userBlood.size(); i++){
+            xVals.add(userBlood.get(i).getType());
+        }
 
         return xVals;
     }
@@ -227,16 +244,47 @@ public class MainActivity extends AppCompatActivity implements OnChartGestureLis
     //------------------------- 혈당 수치 값 -----------------------------
     private ArrayList<Entry> setYAxisValues(){
         ArrayList<Entry> yVals = new ArrayList<Entry>();
-        yVals.add(new Entry(88, 0));
-        yVals.add(new Entry(120, 1));
-        yVals.add(new Entry(140, 2));
-        yVals.add(new Entry(100, 3));
-        yVals.add(new Entry(90, 4));
+//        yVals.add(new Entry(88, 0));
+//        yVals.add(new Entry(120, 1));
+//        yVals.add(new Entry(140, 2));
+//        yVals.add(new Entry(100, 3));
+//        yVals.add(new Entry(90, 4));
+
+        for (int i=0; i<userBlood.size(); i++){
+            yVals.add(new Entry(userBlood.get(i).getBlood_data(), i));
+        }
 
         return yVals;
     }
 
+    public void getBloodDate(){
+
+    }
+
     private void setData() {
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy-MM-dd");
+        currDate = sdfNow.format(date);
+
+
+        databaseReference.child("Blood").child(user.getUid()).child(currDate).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Blood blood = snapshot.getValue(Blood.class);
+                    userBlood.add(blood);
+                   }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         ArrayList<String> xVals = setXAxisValues();
 
         ArrayList<Entry> yVals = setYAxisValues();
@@ -318,12 +366,51 @@ public class MainActivity extends AppCompatActivity implements OnChartGestureLis
 
     //------------------------- 데이터 값 누르면 정보가 나옴. -----------------------------
     @Override
-    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+    public void onValueSelected(Entry e, final int dataSetIndex, Highlight h) {
         String label = xVals.get(e.getXIndex()).toString();
         Log.i("########Entry selected",label+","+e.getVal());//e.toString()
         Log.i("LOWHIGH", "low: " + mChart.getLowestVisibleXIndex() + ", high: " + mChart.getHighestVisibleXIndex());
 
         //Log.i("MIN MAX", "xmin: " + mChart.getXChartMin() + ", xmax: " + mChart.getXChartMax() + ", ymin: " + mChart.getYChartMin() + ", ymax: " + mChart.getYChartMax());
+
+        TextView tv_date = (TextView)findViewById(R.id.tv_date);
+        final TextView tv_food = (TextView)findViewById(R.id.tv_foodInfo);
+        TextView tv_exercise = (TextView)findViewById(R.id.tv_exerciseInfo);
+        final ArrayList<UserFood> foodList = new ArrayList<>();
+        final String bloodTime = userBlood.get(dataSetIndex).getTime();
+        String str = "";
+        double calory = 0;
+
+        tv_date.setText(currDate + " "+ bloodTime+" 혈당: "+ e.getVal()+"mg/dL");
+        databaseReference.child("User_Food").child(user.getUid()).child(currDate).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    if(snapshot.getKey().compareTo(bloodTime) <= 0){
+                        UserFood userFood = snapshot.getValue(UserFood.class);
+                        foodList.add(userFood);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        for(int i=0; i<foodList.size(); i++){
+            str += foodList.get(i).getName();
+            calory += foodList.get(i).getKcal();
+            if (i == foodList.size()-1){
+                return;
+            }else{
+                str += ",";
+            }
+        }
+
+        tv_food.setText("식단: " + str + " / 총 칼로리: " + calory + " kcal");
+
     }
 
     @Override
@@ -332,7 +419,7 @@ public class MainActivity extends AppCompatActivity implements OnChartGestureLis
     }
 
     public void setViewPager(){
-        databaseReference.child("bloodsugar").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Recommend_Comment").child("bloodsugar").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final ArrayList<String> comments = new ArrayList<>();
@@ -353,7 +440,7 @@ public class MainActivity extends AppCompatActivity implements OnChartGestureLis
             }
         });
 
-        databaseReference.child("meal").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Recommend_Comment").child("meal").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final ArrayList<String> comments = new ArrayList<>();
@@ -375,7 +462,7 @@ public class MainActivity extends AppCompatActivity implements OnChartGestureLis
             }
         });
 
-        databaseReference.child("exercise").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Recommend_Comment").child("exercise").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final ArrayList<String> comments = new ArrayList<>();

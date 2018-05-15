@@ -126,7 +126,7 @@ public class BloodActivity extends AppCompatActivity {
     public String getDateStr(){
         long now = System.currentTimeMillis();
         Date date = new Date(now);
-        SimpleDateFormat sdfNow = new SimpleDateFormat("YYYY-MM-dd");
+        SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy-MM-dd");
         return sdfNow.format(date);
     }
     public String getTimeStr(){
