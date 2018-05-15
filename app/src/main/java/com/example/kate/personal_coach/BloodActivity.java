@@ -46,7 +46,27 @@ public class BloodActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private List<Blood> bloodList= new ArrayList<Blood>();
+    final BloodAdapter bloodAdapter = new BloodAdapter();
 
+    private ValueEventListener getBloodList = new ValueEventListener(){
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+
+            for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                Blood bvo = snapshot.getValue(Blood.class);
+                bloodList.add(bvo);
+
+            }
+            Log.i("BloodList" , "size"+bloodList.size());
+            bloodAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,31 +76,32 @@ public class BloodActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        final BloodAdapter bloodAdapter = new BloodAdapter();
         mRecyclerView.setAdapter(bloodAdapter);
 
 
         Dlab_DB = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
-        FirebaseDatabase.getInstance().getReference("Blood").child(mAuth.getCurrentUser().getUid()).child(getDateStr()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Blood blood = snapshot.getValue(Blood.class);
-                    bloodList.add(blood);
+        Dlab_DB.child("Blood").child(mAuth.getCurrentUser().getUid()).child(getDateStr()).addValueEventListener(getBloodList);
 
-                }
-
-                bloodAdapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        FirebaseDatabase.getInstance().getReference("Blood").child(mAuth.getCurrentUser().getUid()).child(getDateStr()).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+//                    Blood blood = snapshot.getValue(Blood.class);
+//                    bloodList.add(blood);
+//
+//                }
+//
+//                bloodAdapter.notifyDataSetChanged();
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
 
@@ -107,12 +128,20 @@ public class BloodActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                bloodList.clear();
+
+
                 b.setTime(getDateStr()+" "+getTimeStr());
                 b.setBlood_data(Integer.parseInt(bloodInput.getText().toString()));
+
                 user = mAuth.getCurrentUser();
                 Dlab_DB.child("Blood").child(user.getUid()).child(getDateStr()).child(getTimeStr()).setValue(b);
 
+                bloodAdapter.notifyDataSetChanged();
                 Toast.makeText(BloodActivity.this, "혈당입력완료", Toast.LENGTH_SHORT).show();
+                //bloodAdapter.notifyDataSetChanged();
+
                 //Intent intent = new Intent(BloodActivity.this,MainActivity.class);
                 //startActivity(intent);
             }
@@ -156,6 +185,7 @@ public class BloodActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
+            //Log.i("Size", "size$$$" + bloodList.size());
             return bloodList.size();
         }
 
