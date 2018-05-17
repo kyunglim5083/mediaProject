@@ -37,6 +37,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -64,7 +65,6 @@ public class FitnessActivity extends AppCompatActivity implements GoogleApiClien
         super.onCreate(savedInstanceState);
 
 
-
         Dlab_DB = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
@@ -89,8 +89,32 @@ public class FitnessActivity extends AppCompatActivity implements GoogleApiClien
                 .addOnConnectionFailedListener(this)
                 .build();
 
+        Calendar cal = Calendar.getInstance();
+        Date now = new Date();
+        cal.setTime(now);
+        long endTime = cal.getTimeInMillis();
+
+        cal.setTime(now);
+        cal.set(Calendar.MILLISECOND, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.HOUR, 0);
+
+        long startTime = cal.getTimeInMillis();
+
+        java.text.DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log.i("STARTTime", "Range Start: " + dateFormat.format(startTime));
+        Log.i("ENTTime", "Range End: " + dateFormat.format(endTime));
+
         DataSourcesRequest dataSourceRequest = new DataSourcesRequest.Builder()
-                .setDataTypes( DataType.TYPE_STEP_COUNT_CUMULATIVE,DataType.TYPE_HEART_RATE_BPM )
+                .setDataTypes(
+                        DataType.TYPE_STEP_COUNT_DELTA,
+                        DataType.AGGREGATE_STEP_COUNT_DELTA,
+                        DataType.TYPE_CALORIES_EXPENDED,
+                        DataType.AGGREGATE_CALORIES_EXPENDED,
+                        DataType.TYPE_ACTIVITY_SEGMENT,
+                        DataType.AGGREGATE_ACTIVITY_SUMMARY
+                        )
                 .setDataSourceTypes( DataSource.TYPE_RAW )
                 .build();
 
@@ -98,9 +122,9 @@ public class FitnessActivity extends AppCompatActivity implements GoogleApiClien
             @Override
             public void onResult(DataSourcesResult dataSourcesResult) {
                 for( DataSource dataSource : dataSourcesResult.getDataSources() ) {
-                    if( DataType.TYPE_STEP_COUNT_CUMULATIVE.equals( dataSource.getDataType() ) ) {
-                        registerFitnessDataListener(dataSource, DataType.TYPE_STEP_COUNT_CUMULATIVE);
-                    }
+
+                    registerFitnessDataListener(dataSource, dataSource.getDataType());
+
                 }
             }
         };
@@ -150,38 +174,27 @@ public class FitnessActivity extends AppCompatActivity implements GoogleApiClien
     }
     private void findFitnessDataSources() {
         DataSourcesRequest dataSourceRequest = new DataSourcesRequest.Builder()
-                .setDataTypes(DataType.TYPE_STEP_COUNT_CUMULATIVE)
-                .setDataTypes(DataType.TYPE_STEP_COUNT_DELTA)
-                .setDataTypes(DataType.TYPE_LOCATION_SAMPLE)
-                .setDataTypes(DataType.TYPE_WORKOUT_EXERCISE)
-                .setDataTypes(DataType.TYPE_CYCLING_PEDALING_CUMULATIVE)
-                .setDataTypes(DataType.TYPE_DISTANCE_DELTA)
-                .setDataTypes(DataType.TYPE_HEART_RATE_BPM)
-                .setDataTypes(DataType.TYPE_ACTIVITY_SEGMENT)
+                .setDataTypes(
+                        DataType.TYPE_STEP_COUNT_DELTA,
+                        DataType.AGGREGATE_STEP_COUNT_DELTA,
+                        DataType.TYPE_CALORIES_EXPENDED,
+                        DataType.AGGREGATE_CALORIES_EXPENDED,
+                        DataType.TYPE_ACTIVITY_SEGMENT,
+                        DataType.AGGREGATE_ACTIVITY_SUMMARY,
+
+                        DataType.TYPE_HEART_RATE_BPM)
                 .setDataSourceTypes( DataSource.TYPE_RAW )
                 .build();
+
+
 
         ResultCallback<DataSourcesResult> dataSourcesResultCallback = new ResultCallback<DataSourcesResult>() {
             @Override
             public void onResult(DataSourcesResult dataSourcesResult) {
                 for( DataSource dataSource : dataSourcesResult.getDataSources() ) {
-                    if( DataType.TYPE_STEP_COUNT_CUMULATIVE.equals( dataSource.getDataType() ) ) {
-                        registerFitnessDataListener(dataSource, DataType.TYPE_STEP_COUNT_CUMULATIVE);
-                    }else if(DataType.TYPE_STEP_COUNT_DELTA.equals( dataSource.getDataType() )){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_STEP_COUNT_DELTA);
-                    }else if(DataType.TYPE_LOCATION_SAMPLE.equals( dataSource.getDataType() )){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_LOCATION_SAMPLE);
-                    }else if(DataType.TYPE_WORKOUT_EXERCISE.equals( dataSource.getDataType() )){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_WORKOUT_EXERCISE);
-                    }else if(DataType.TYPE_CYCLING_PEDALING_CUMULATIVE.equals( dataSource.getDataType() )){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_CYCLING_PEDALING_CUMULATIVE);
-                    }else if(DataType.TYPE_DISTANCE_DELTA.equals( dataSource.getDataType() )){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_DISTANCE_DELTA);
-                    }else if(DataType.TYPE_HEART_RATE_BPM.equals( dataSource.getDataType() )){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_HEART_RATE_BPM);
-                    }else if(DataType.TYPE_ACTIVITY_SEGMENT.equals( dataSource.getDataType() )){
-                        registerFitnessDataListener(dataSource, DataType.TYPE_ACTIVITY_SEGMENT);
-                    }
+
+                    registerFitnessDataListener(dataSource, dataSource.getDataType());
+
                 }
             }
         };
@@ -193,15 +206,16 @@ public class FitnessActivity extends AppCompatActivity implements GoogleApiClien
 
     private FitnessOptions getFitnessSignInOptions() {
         return FitnessOptions.builder()
-                .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE)
                 .addDataType(DataType.TYPE_STEP_COUNT_DELTA)
-                .addDataType(DataType.TYPE_LOCATION_SAMPLE)
-                .addDataType(DataType.TYPE_WORKOUT_EXERCISE)
-                .addDataType(DataType.TYPE_CYCLING_PEDALING_CUMULATIVE)
-                .addDataType(DataType.TYPE_DISTANCE_DELTA)
-                .addDataType(DataType.TYPE_HEART_RATE_BPM)
+                .addDataType(DataType.AGGREGATE_STEP_COUNT_DELTA)
+                .addDataType(DataType.TYPE_CALORIES_EXPENDED)
+                .addDataType(DataType.AGGREGATE_CALORIES_EXPENDED)
                 .addDataType(DataType.TYPE_ACTIVITY_SEGMENT)
+                .addDataType(DataType.AGGREGATE_ACTIVITY_SUMMARY)
+                .addDataType(DataType.TYPE_HEART_RATE_BPM)
+                .addDataType( DataType.TYPE_LOCATION_SAMPLE)
                 .build();
+
     }
     private boolean hasOAuthPermission() {
         FitnessOptions fitnessOptions = getFitnessSignInOptions();
