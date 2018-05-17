@@ -114,7 +114,7 @@ public class BloodActivity extends AppCompatActivity {
                 b.setTime(getTimeStr());
                 b.setBlood_data(Integer.parseInt(bloodInput.getText().toString()));
                 user = mAuth.getCurrentUser();
-                Dlab_DB.child("Blood").child(user.getUid()).child(getTimeStr().replace("/", "")).setValue(b);
+                Dlab_DB.child("Blood").child(user.getUid()).child(getDateStr()).child(getTimeStr()).setValue(b);
 
                 Toast.makeText(BloodActivity.this, "혈당입력완료", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(BloodActivity.this,MainActivity.class);
@@ -123,10 +123,16 @@ public class BloodActivity extends AppCompatActivity {
         });
 
     }
+    public String getDateStr(){
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat sdfNow = new SimpleDateFormat("YYYY-MM-dd");
+        return sdfNow.format(date);
+    }
     public String getTimeStr(){
         long now = System.currentTimeMillis();
         Date date = new Date(now);
-        SimpleDateFormat sdfNow = new SimpleDateFormat("MM-dd HH:mm:ss");
+        SimpleDateFormat sdfNow = new SimpleDateFormat("HH:mm");
         return sdfNow.format(date);
     }
 
@@ -143,7 +149,7 @@ public class BloodActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(BloodAdapter.ViewHolder holder, int position) {
-            Log.i("BloodList", "bllodList:" + bloodList.get(position).blood_data);
+            Log.i("BloodList", "bloodList:" + bloodList.get(position).blood_data);
             holder.tv_blood_data.setText(String.valueOf(bloodList.get(position).blood_data));
             holder.tv_bloodInfo.setText(String.valueOf(bloodList.get(position).type));
             holder.tv_dateInfo.setText(String.valueOf(bloodList.get(position).time));

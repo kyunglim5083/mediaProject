@@ -6,16 +6,141 @@
     android:layout_height="match_parent"
     tools:context="com.example.kate.personal_coach.MainActivity">
 
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#eeeeee">
 
-        <Button
-            android:id="@+id/addBloodBtn"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/main_toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_marginBottom="5dp">
+
+        <ImageView
+              android:layout_width="25dp"
+              android:layout_height="25dp"
+              android:src="@drawable/logo"/>
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Dlab"
+            android:gravity="center"
+            android:layout_marginRight="40dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#000000"/>
+
+    </android.support.v7.widget.Toolbar>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp">
+
+        </android.support.v4.view.ViewPager>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/linechart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="80dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_black"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#AA000000">
+    </LinearLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_plus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:clickable="true"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorMain"
+        android:src="@drawable/ic_add_white_24dp"/>
+
+    <LinearLayout
+        android:id="@+id/bloodLayout"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="180dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginRight="26dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginTop="10dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:text="혈당 입력"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/addBloodBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:backgroundTint="#FFFFFF"
+            android:src="@drawable/blood_drop"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/foodLayout"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginRight="26dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginTop="10dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:text="식단 입력"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/addFoodBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:backgroundTint="#FFFFFF"
+            android:src="@drawable/food"/>
     </LinearLayout>
 
 
