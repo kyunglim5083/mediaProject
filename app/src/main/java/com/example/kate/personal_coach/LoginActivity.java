@@ -76,6 +76,9 @@ public class LoginActivity extends BaseActivity implements
 
     private GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
+
+    private GoogleApiClient mClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,9 +160,12 @@ public class LoginActivity extends BaseActivity implements
         }
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
-                Intent intent = new Intent(getApplicationContext(),ActivityService.class); // 이동할 컴포넌트
-                startService(intent); // 서비스 시작
+                //Intent intent = new Intent(getApplicationContext(),ActivityService.class); // 이동할 컴포넌트
+                //startService(intent); // 서비스 시작
                 //googleFitData();
+                //Intent intent = new Intent(getApplicationContext(), FitnessActivity.class);
+                //startActivity(intent);
+                getFitnessDate();
             }
         }
 
@@ -317,6 +323,8 @@ public class LoginActivity extends BaseActivity implements
 
         Log.i("getFitnessData", "in*********");
 
+
+
         FitnessOptions fitnessOptions = FitnessOptions.builder()
                 .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
@@ -326,6 +334,8 @@ public class LoginActivity extends BaseActivity implements
 
                 .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.AGGREGATE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
+
+                .addDataType(DataType.TYPE_LOCATION_SAMPLE, FitnessOptions.ACCESS_READ)
                 .build();
 
         if (!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(this), fitnessOptions)) {
@@ -337,9 +347,10 @@ public class LoginActivity extends BaseActivity implements
         } else {
             Log.i("getFitnessData", "Service*********");
             Intent intent = new Intent(getApplicationContext(),ActivityService.class); // 이동할 컴포넌
-
             startService(intent); // 서비스 시작
             //googleFitData();
+            //Intent intent = new Intent(getApplicationContext(), FitnessActivity.class);
+            //startActivity(intent);
         }
 
 
@@ -347,6 +358,7 @@ public class LoginActivity extends BaseActivity implements
 
 
     }
+
 
 
 }
