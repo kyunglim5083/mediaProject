@@ -5,49 +5,71 @@ package com.example.kate.personal_coach;
  */
 
 public class ActivityVO {
-    String time;
-    int step;
-    float kcal;
+    String type;
+    String startTime;
+    String endTime;
+    String field;
+    String value;
 
     public ActivityVO() {
     }
 
-    public ActivityVO(String time, int step, float kcal) {
-        this.time = time;
-        this.step = step;
-        this.kcal = kcal;
+    public ActivityVO(String type, String startTime, String endTime, String field, String value) {
+        this.type = type;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.field = field;
+        this.value = value;
     }
 
-    public String getTime() {
-        return time;
+    public String getType() {
+        return type;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public int getStep() {
-        return step;
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setStep(int step) {
-        this.step = step;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 
-    public float getKcal() {
-        return kcal;
+    public String getEndTime() {
+        return endTime;
     }
 
-    public void setKcal(float kcal) {
-        this.kcal = kcal;
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     @Override
     public String toString() {
         return "ActivityVO{" +
-                "time='" + time + '\'' +
-                ", step=" + step +
-                ", kcal=" + kcal +
+                "type='" + type + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", field='" + field + '\'' +
+                ", value='" + value + '\'' +
                 '}';
     }
 }

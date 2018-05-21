@@ -63,15 +63,13 @@ public class BloodActivity extends AppCompatActivity {
         Dlab_DB = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
-        final Blood searched = new Blood();
-        FirebaseDatabase.getInstance().getReference("Blood").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Blood").child(mAuth.getCurrentUser().getUid()).child(getDateStr()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Blood blood = snapshot.getValue(Blood.class);
                     bloodList.add(blood);
 
-                    Log.i("DataSnapShot", "blood " + blood.getBlood_data());
                 }
 
                 bloodAdapter.notifyDataSetChanged();
@@ -89,8 +87,6 @@ public class BloodActivity extends AppCompatActivity {
         final EditText bloodInput = (EditText)findViewById(R.id.bloodInput);
         Button sendButton = (Button)findViewById(R.id.sendButton);
 
-        final String bloodTime;
-        final String blood = "";
         Spinner s = (Spinner) findViewById(R.id.spinner);
 
         final Blood b = new Blood();
@@ -111,14 +107,14 @@ public class BloodActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                b.setTime(getTimeStr());
+                b.setTime(getDateStr()+" "+getTimeStr());
                 b.setBlood_data(Integer.parseInt(bloodInput.getText().toString()));
                 user = mAuth.getCurrentUser();
                 Dlab_DB.child("Blood").child(user.getUid()).child(getDateStr()).child(getTimeStr()).setValue(b);
 
                 Toast.makeText(BloodActivity.this, "혈당입력완료", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(BloodActivity.this,MainActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(BloodActivity.this,MainActivity.class);
+                //startActivity(intent);
             }
         });
 
@@ -149,7 +145,8 @@ public class BloodActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(BloodAdapter.ViewHolder holder, int position) {
-            Log.i("BloodList", "bloodList:" + bloodList.get(position).blood_data);
+
+
             holder.tv_blood_data.setText(String.valueOf(bloodList.get(position).blood_data));
             holder.tv_bloodInfo.setText(String.valueOf(bloodList.get(position).type));
             holder.tv_dateInfo.setText(String.valueOf(bloodList.get(position).time));
