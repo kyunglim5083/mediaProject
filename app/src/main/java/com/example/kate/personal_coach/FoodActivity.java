@@ -109,6 +109,7 @@ public class FoodActivity extends AppCompatActivity implements View.OnClickListe
         getCurrentDate();
         setTimeSpinner();
 
+        userFood = new UserFood();
         foodList = new ArrayList<>();
         userFoodList = new ArrayList<>();
 
@@ -131,6 +132,20 @@ public class FoodActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 food = (Food) adapterView.getItemAtPosition(i);
+            }
+        });
+
+        Spinner spinner = (Spinner) findViewById(R.id.mealTypeSpinner);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Object itemAtPosition = adapterView.getItemAtPosition(i);
+                userFood.setMealType(itemAtPosition.toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 
@@ -187,10 +202,10 @@ public class FoodActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         // 음식정보 저장
-        userFood = new UserFood();
         userFood.setTime(currDate+" "+mealTime);
         userFood.setKcal(food.getKcal());
         userFood.setName(food.getName());
+        userFood.setGroup(food.getGroup());
 
         databaseReference.child("User_Food").child(user.getUid()).child(currDate).child(mealTime).setValue(userFood);
 
