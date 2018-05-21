@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -99,6 +100,17 @@ public class MainActivity extends AppCompatActivity implements OnChartGestureLis
         actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
         actionBar.setDisplayShowTitleEnabled(false);
 
+        //주간,월간 보고서로 넘어가는 버튼
+
+        ImageView gotoGraph=(ImageView)findViewById(R.id.gotoGraph);
+        gotoGraph.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,BloodReport.class);
+                startActivity(intent);
+            }
+        });
         mChart = (LineChart) findViewById(R.id.linechart);
         mChart.setOnChartGestureListener(this);
         mChart.setOnChartValueSelectedListener(this);
