@@ -144,10 +144,47 @@ public class BloodActivity extends AppCompatActivity {
 
                 //Intent intent = new Intent(BloodActivity.this,MainActivity.class);
                 //startActivity(intent);
+                compareBlood(b);
+                //DatabaseReference list = Dlab_DB.child("Blood").child(user.getUid()).child(getDateStr());
+
             }
         });
 
     }
+
+    private void compareBlood(Blood b) {
+        //공복 - 정상: 100미만, 당뇨 전단계 : 100-125, 당뇨 : 126 이상
+        //식후 - 정상 140미만, 당뇨 전단계 : 140-199, 당뇨 : 200 이상
+
+        //이전에 입력한 혈당과의 차이가 70 이상일 때 혈당 type, 혈당차, 걸음수, 운동 종류, 먹은 음식 디비에 저장
+
+        //디비에서 오늘 입력한 혈당중 제일 마지막에 입력한 값 가져오기
+
+        //가져온 값과 현재 입력한 값 비교
+
+        //차이가 +- 70 이상이면 디비에 등록
+
+        FirebaseDatabase.getInstance().getReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d("CompareBlood####", "value : " + snapshot.getValue());
+                    Blood bvo = snapshot.getValue(Blood.class);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+    }
+
     public String getDateStr(){
         long now = System.currentTimeMillis();
         Date date = new Date(now);
