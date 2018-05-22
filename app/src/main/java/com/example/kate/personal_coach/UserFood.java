@@ -9,6 +9,8 @@ public class UserFood {
     private String time;
     private String name;
     private double kcal;
+    private String group;
+    private String mealType;
 
     public UserFood(){}
 
@@ -34,5 +36,21 @@ public class UserFood {
 
     public void setKcal(double kcal) {
         this.kcal = kcal;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public String getMealType() {
+        return mealType;
+    }
+
+    public void setMealType(String mealType) {
+        this.mealType = mealType;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }

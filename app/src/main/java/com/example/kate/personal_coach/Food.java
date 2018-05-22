@@ -8,6 +8,7 @@ public class Food {
     private int No;
     private String Name;
     private double Kcal;
+    private String Group;
 
     public Food() {}
 
@@ -33,6 +34,14 @@ public class Food {
 
     public void setKcal(double kcal) {
         this.Kcal = kcal;
+    }
+
+    public String getGroup() {
+        return Group;
+    }
+
+    public void setGroup(String group) {
+        Group = group;
     }
 
     @Override
