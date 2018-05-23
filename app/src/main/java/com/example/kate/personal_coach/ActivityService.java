@@ -397,11 +397,11 @@ public class ActivityService extends Service {
                                     avo.setValue(dp.getValue(field).toString());
 
 
-
+                                    Ajou_DB.child("Activity").child(user.getUid()).child(getDateStr()).child(avo.getEndTime()).setValue(avo);
                                 }
-                                avoList.add(avo);
-                                Log.i("AVOLIST", "size" + avoList.size());
-                                Ajou_DB.child("Activity").child(user.getUid()).child(getDateStr()).child(getTimeStr()).setValue(avoList);
+                                //avoList.add(avo);
+                               // Log.i("AVOLIST", "size" + avoList.size());
+
                             }
 
                         }
