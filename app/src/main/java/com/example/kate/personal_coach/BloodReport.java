@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,11 +38,15 @@ import static com.example.kate.personal_coach.LoginActivity.Dlab_DB;
 
 public class BloodReport extends AppCompatActivity {
 
-    Button weekly_b,monthly_b,empty,before_m,after_m,before_sleep;
+    Button daily_b,weekly_b,monthly_b,empty,before_m,after_m,before_sleep;
+    TableLayout table1,table2;
     TextView max_v,min_v,avg_v;
-    int clicked1=0,clicked2=0;
+    int clicked1=2,clicked2=0;
     FirebaseUser user;
     FirebaseAuth mAuth;
+    int[][]daily=new int[7][4];
+    int[][]daily_cnt=new int[7][4];
+    int[][]daily_avg=new int[7][4];
     int[][]week=new int[5][4];
     int[][]week_cnt=new int[5][4]; //입력한 개수
     float[][]weekly_avg=new float[5][4];
@@ -60,8 +65,9 @@ public class BloodReport extends AppCompatActivity {
         user = mAuth.getCurrentUser();
 
 
+        daily_b=(Button)findViewById(R.id.daily_b);
         weekly_b = (Button) findViewById(R.id.weekly_b) ;
-
+        table1=(TableLayout)findViewById(R.id.table1);
         monthly_b = (Button) findViewById(R.id.monthly_b) ;
         empty=(Button) findViewById(R.id.empty);
         before_m=(Button) findViewById(R.id.before_m);
@@ -83,23 +89,32 @@ public class BloodReport extends AppCompatActivity {
         Button.OnClickListener onClickListener = new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TextView textView2 = (TextView) findViewById(R.id.text2);
-                //TextView textView3 = (TextView) findViewById(R.id.text3);
 
                 switch (v.getId()) {
+                    case R.id.daily_b:
+                        clicked1=2;
+                        daily_b.setTextColor(Color.rgb(255, 102, 102));
+                        weekly_b.setTextColor(Color.rgb(204, 204, 204));
+                        monthly_b.setTextColor(Color.rgb(204, 204, 204));
+
+                        break;
                     case R.id.weekly_b:
                         clicked1 = 0;
                         /*textView2.setVisibility(View.VISIBLE);
                         textView3.setVisibility(View.INVISIBLE);*/
+
                         Log.d("here","?????");
                         weekly_b.setTextColor(Color.rgb(255, 102, 102));
+                        daily_b.setTextColor(Color.rgb(204, 204, 204));
                         monthly_b.setTextColor(Color.rgb(204, 204, 204));
                         break;
                     case R.id.monthly_b:
                         clicked1 = 1;
+
                         /*textView2.setVisibility(View.INVISIBLE);
                         textView3.setVisibility(View.VISIBLE);*/
                         weekly_b.setTextColor(Color.rgb(204, 204, 204));
+                        daily_b.setTextColor(Color.rgb(204, 204, 204));
                         monthly_b.setTextColor(Color.rgb(255, 102, 102));
                         break;
                     case R.id.empty:
@@ -148,6 +163,7 @@ public class BloodReport extends AppCompatActivity {
 
 
         };
+        daily_b.setOnClickListener(onClickListener);
         weekly_b.setOnClickListener(onClickListener);
         monthly_b.setOnClickListener(onClickListener);
         empty.setOnClickListener(onClickListener);
@@ -158,7 +174,7 @@ public class BloodReport extends AppCompatActivity {
 
         setupGraph();
         getVal(clicked1, clicked2);
-        weekly_b.performClick();
+        daily_b.performClick();
         empty.performClick();
 
 
@@ -174,6 +190,7 @@ public class BloodReport extends AppCompatActivity {
     //week의 공복,식전,식후,취침전 데이터 합 구하기
     private void calculateWeekData() {
 
+        final int curWeek=calendar.get(Calendar.WEEK_OF_MONTH);
         //사용자 확인.
         //Toast.makeText(getApplicationContext(),user.getDisplayName(),Toast.LENGTH_LONG).show();
         //주,월 0,1
@@ -196,6 +213,7 @@ public class BloodReport extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     calendar.setTime(convertedDate);
+
 
                     //시간 별로
                     for(DataSnapshot timeData: data.getChildren()){
@@ -237,19 +255,98 @@ public class BloodReport extends AppCompatActivity {
             }
 
         });
+        //
+        //------------------일별로 나누기
+        Dlab_DB.child("Blood").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot data:dataSnapshot.getChildren()){
+                    //이번주에 해당하는 날짜 가지고 오기
+                    String dateString = data.getKey();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date convertedDate = new Date();
+                    try {
+                        convertedDate = dateFormat.parse(dateString);
+                    } catch (ParseException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
 
-    }
-    private void calculateB(){
-        for(int i=0;i<5;i++){
-            for(int j=0;j<4;j++){
-                if(week[i][j]!=0){
-                    weekly_avg[i][j]=week[i][j]/week_cnt[i][j];
+                    calendar.setTime(convertedDate);
+
+                    //오늘과 같은 주라면. 탐색
+                    if(calendar.get(Calendar.WEEK_OF_MONTH)==curWeek){
+
+                    //시간 별로
+                    for(DataSnapshot timeData: data.getChildren()){
+
+                        String type=timeData.child("type").getValue().toString();
+                        int val=Integer.parseInt(timeData.child("blood_data").getValue().toString());
+                        //해당 되는 주에 더하기.
+                        if(type.contains("공복")) {
+                            daily[calendar.get(Calendar.DAY_OF_WEEK)-1][0]+=val;
+                            daily_cnt[calendar.get(Calendar.DAY_OF_WEEK)-1][0]+=1;
+                            //Log.d("공복 체크",week[calendar.get(Calendar.DAY_OF_WEEK)-1][0]+"/"+week_cnt[calendar.get(Calendar.WEEK_OF_MONTH)-1][0]+"/"+calendar.get(Calendar.WEEK_OF_MONTH));
+
+                        }else if(type.contains("식전")) {
+                            daily[calendar.get(Calendar.DAY_OF_WEEK)-1][1]+=val;
+                            daily_cnt[calendar.get(Calendar.DAY_OF_WEEK)-1][1]+=1;
+                        }
+                        else if(type.contains("식후")) {
+                            Log.d("일별 식후일때 혈당값gkq :",val+"");
+                            daily[calendar.get(Calendar.DAY_OF_WEEK)-1][2]+=val;
+                            daily_cnt[calendar.get(Calendar.DAY_OF_WEEK)-1][2]+=1;
+                            Log.d("일별 식후 체크",daily[calendar.get(Calendar.DAY_OF_WEEK)-1][2]+"/"+daily_cnt[calendar.get(Calendar.DAY_OF_WEEK)-1][2]+"/"+calendar.get(Calendar.DAY_OF_WEEK));
+                        }
+                        else{
+                            daily[calendar.get(Calendar.DAY_OF_WEEK)-1][3]+=val;
+                            daily_cnt[calendar.get(Calendar.DAY_OF_WEEK)-1][3]+=1;
+                        }
+                    }
+                    }
+
 
                 }
 
+                calculateB();
+
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+
+
+    }
+    private void calculateB(){
+        //주별 평균
+        if(clicked1==0){
+            for(int i=0;i<5;i++){
+                for(int j=0;j<4;j++){
+                    if(week[i][j]!=0){
+                        weekly_avg[i][j]=week[i][j]/week_cnt[i][j];
+
+                    }
+
+                }
+            }
+            Log.d("공복 평균",weekly_avg[1][0]+""+week[1][0]+"/"+week_cnt[1][0]);
+        }else if(clicked1==2){//일별 평균
+            for(int i=0;i<7;i++){
+                for(int j=0;j<4;j++){
+                    if(daily[i][j]!=0){
+                        daily_avg[i][j]=daily[i][j]/daily_cnt[i][j];
+
+                    }
+
+                }
             }
         }
-        Log.d("공복 평균",weekly_avg[1][0]+""+week[1][0]+"/"+week_cnt[1][0]);
+
     }
 
     private void getVal(int period,int time){
@@ -260,16 +357,28 @@ public class BloodReport extends AppCompatActivity {
         float sum=0;
         int cnt=0;
         //주간 선택했을 때.
-        if(period==0){
-            for(int i=0;i<5;i++){
-                if(week[i][time]!=0){
-                    min=min<weekly_avg[i][time]?min:weekly_avg[i][time];
-                    max=max>weekly_avg[i][time]?max:weekly_avg[i][time];
-                    sum+=weekly_avg[i][time];
+        if(period==0) {
+            for (int i = 0; i < 5; i++) {
+                if (week[i][time] != 0) {
+                    min = min < weekly_avg[i][time] ? min : weekly_avg[i][time];
+                    max = max > weekly_avg[i][time] ? max : weekly_avg[i][time];
+                    sum += weekly_avg[i][time];
                     cnt++;
                 }
 
             }
+        }else if(period==2){//일간 선택했을 때.
+            for (int i = 0; i < 7; i++) {
+                if (daily[i][time] != 0) {
+                    min = min < daily_avg[i][time] ? min : daily_avg[i][time];
+                    max = max > daily_avg[i][time] ? max : daily_avg[i][time];
+                    sum += daily_avg[i][time];
+                    cnt++;
+                }
+
+            }
+
+        }
 
             if(cnt!=0){
                 avg=sum/cnt;
@@ -282,8 +391,6 @@ public class BloodReport extends AppCompatActivity {
                 min_v.setText("");
                 avg_v.setText("");
             }
-        }
-
 
         Log.d("클릭 한 값 계산",min+"/"+max+"/"+avg+cnt);
 
@@ -357,12 +464,18 @@ public class BloodReport extends AppCompatActivity {
                     String input=(i+1)+"주";
                     xVals.add(input);
 
-
-
             }
 
         }else{
-            //월 일경우.
+            //일별 일경우.
+            xVals.clear();
+            xVals.add("일");
+            xVals.add("월");
+            xVals.add("화");
+            xVals.add("수");
+            xVals.add("목");
+            xVals.add("금");
+            xVals.add("토");
         }
 
 
@@ -383,7 +496,15 @@ public class BloodReport extends AppCompatActivity {
             }
 
         }else{
-            //월 일경우.
+            //일별 일경우.
+            yVals.clear();
+            for(int i=0;i<7;i++){
+                if(daily[i][clicked2]!=0){
+                    Log.d((i+1)+"번째 날의 혈당값",daily[i][clicked2]+"");
+                    yVals.add(new Entry(daily_avg[i][clicked2], i));
+                }
+
+            }
         }
 
         return yVals;
