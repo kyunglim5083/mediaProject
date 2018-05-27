@@ -45,5 +45,11 @@ dependencies {
 
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
 
+    compile 'org.deeplearning4j:deeplearning4j-core:0.7.2'
+    compile 'org.nd4j:nd4j-native:0.7.2'
+    compile 'org.nd4j:nd4j-native:0.7.2:android-x86'
+    compile 'org.nd4j:nd4j-native:0.7.2:android-arm'
+
+
 }
 apply plugin: 'com.google.gms.google-services'
