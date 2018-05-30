@@ -8,6 +8,20 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     >
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_weight="0"
+        android:text="signed_out"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <LinearLayout
         android:id="@+id/sign_out_and_disconnect"
         android:layout_width="230dp"
@@ -31,14 +45,14 @@
             android:textAllCaps="false"
             android:text="sign_out"></Button>
 
-        <Button
-            android:id="@+id/disconnect_button"
-            android:layout_width="0dp"
-            android:layout_height="55dp"
-            android:layout_weight="1"
-            android:text="disconnect"
-            android:textAllCaps="false"
-            app:layout_constraintLeft_toLeftOf="parent" />
+        <!--<Button-->
+            <!--android:id="@+id/disconnect_button"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="55dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="disconnect"-->
+            <!--android:textAllCaps="false"-->
+            <!--app:layout_constraintLeft_toLeftOf="parent" />-->
     </LinearLayout>
 
 

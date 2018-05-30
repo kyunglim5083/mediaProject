@@ -30,10 +30,16 @@
 
                 <TextView
                     android:id="@+id/tv_rc_type"
-                    android:layout_width="match_parent"
+                    android:layout_width="208dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:text="오늘의 혈당 관리!"/>
+                    android:text="오늘의 혈당 관리!"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="예측 혈당 : 200" />
 
             </LinearLayout>
 
