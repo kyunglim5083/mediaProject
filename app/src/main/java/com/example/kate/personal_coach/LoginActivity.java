@@ -1,6 +1,8 @@
 package com.example.kate.personal_coach;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -12,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -67,6 +70,8 @@ public class LoginActivity extends BaseActivity implements
     private static final String AUTH_PENDING = "auth_state_pending";
     private boolean authInProgress = false;
 
+    private TextView mStatusTextView;
+
     static String sex;
     static int age,height,weight;
     // [START declare_auth]
@@ -89,10 +94,12 @@ public class LoginActivity extends BaseActivity implements
         Dlab_DB = FirebaseDatabase.getInstance().getReference();
 
         // Views
+        mStatusTextView = findViewById(R.id.status);
         // Butn listeners
+
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
-        findViewById(R.id.disconnect_button).setOnClickListener(this);
+        //findViewById(R.id.disconnect_button).setOnClickListener(this);
         // [START config_signin]
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -116,6 +123,8 @@ public class LoginActivity extends BaseActivity implements
     @Override
     public void onStart() {
         super.onStart();
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(account);
 
     }
 
@@ -220,15 +229,13 @@ public class LoginActivity extends BaseActivity implements
     // [END signin]
 
     private void signOut() {
-        // Firebase sign out
-        mAuth.signOut();
-
-        // Google sign out
-        mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        // [START_EXCLUDE]
                         updateUI(null);
+                        // [END_EXCLUDE]
                     }
                 });
     }
@@ -247,36 +254,76 @@ public class LoginActivity extends BaseActivity implements
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
-        hideProgressDialog();
-        if (user != null) {
-            // mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
-            //mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+
+    private void updateUI(@Nullable GoogleSignInAccount account) {
+
+
+        if (account != null) {
+            mStatusTextView.setText("signin");
 
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
-            //mStatusTextView.setText(R.string.signed_out);
-
+            mStatusTextView.setText("signed_out");
 
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
     }
 
+
     @Override
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.sign_in_button) {
-            Log.d("로그인 ","okokokokok");
             signIn();
-
         } else if (i == R.id.sign_out_button) {
-            signOut();
-        } else if (i == R.id.disconnect_button) {
-            revokeAccess();
+            onClickSignOutButton(v);
+        }
+//        } else if (i == R.id.disconnect_button) {
+//            revokeAccess();
+//        }else if (i == R.id.disconnect_button) {
+//            revokeAccess();
+//        }
+    }
+
+    public void onClickSignOutButton(View view) {
+
+        if (view.getId() == R.id.sign_out_button) {
+            Log.v("알림", "구글 LOGOUT");
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+
+
+            alertDialogBuilder
+
+                    .setMessage("로그아웃 하시겠습니까?")
+                    .setCancelable(false)
+                    .setPositiveButton("네",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // 네 클릭
+                                    // 로그아웃 함수 call
+                                    signOut();
+                                }
+                            })
+                    .setNegativeButton("아니오",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // 아니오 클릭. dialog 닫기.
+                                    dialog.cancel();
+                                }
+                            })
+                    .setTitle("로그아웃")
+                    .create()
+                    .show();
+            //AlertDialog alertDialog = alertDialogBuilder.create();
+            //alertDialog.show();
+
         }
     }
+
+
 
     //-----------------user DB에 등록--------------
     private void writeNewUser(final String userId) {

@@ -230,7 +230,7 @@ public class BloodActivity extends AppCompatActivity {
                                                 //Walking
                                                 walkingTime += (endTime.getTime() -startTime.getTime())/60000;
 
-                                            }else if(activity.getValue().equals("5")){
+                                            }else if(activity.getValue().equals("0")){
                                                 //in Vehicle
                                                 vehicleTime += (endTime.getTime()-startTime.getTime())/60000;
                                             }
@@ -252,6 +252,11 @@ public class BloodActivity extends AppCompatActivity {
                             avo.setSteps(steps);
                             avo.setCalories(calories);
                             avo.setActivity(activity);
+
+                            for(UserFood uf : userFoodList){
+                                //저녁이면 저녁 식사
+                                //점심 후면 점식 식사.
+                            }
 
                             Dlab_DB.child("Analysis").child(user.getUid()).child(getDateStr()).child(getTimeStr()).setValue(avo);
 
