@@ -46,7 +46,7 @@ public class BloodReport extends AppCompatActivity {
     FirebaseAuth mAuth;
     int[][]daily=new int[7][4];
     int[][]daily_cnt=new int[7][4];
-    int[][]daily_avg=new int[7][4];
+    float[][]daily_avg=new float[7][4];
     int[][]week=new int[5][4];
     int[][]week_cnt=new int[5][4]; //입력한 개수
     float[][]weekly_avg=new float[5][4];
@@ -76,6 +76,16 @@ public class BloodReport extends AppCompatActivity {
         min_v=(TextView)findViewById(R.id.min_v);
         max_v=(TextView)findViewById(R.id.max_v);
         avg_v=(TextView)findViewById(R.id.avg_v);
+        Button report=(Button)findViewById(R.id.report);
+        //리포트
+        report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BloodReport.this, PopupActivity.class);
+                intent.putExtra("data", "Test Popup");
+                startActivityForResult(intent, 1);
+            }
+        });
 
         //chart
         mChart = (LineChart) findViewById(R.id.linechart);
@@ -93,6 +103,8 @@ public class BloodReport extends AppCompatActivity {
                 switch (v.getId()) {
                     case R.id.daily_b:
                         clicked1=2;
+                        setupGraph();
+                        getVal(clicked1, clicked2);
                         daily_b.setTextColor(Color.rgb(255, 102, 102));
                         weekly_b.setTextColor(Color.rgb(204, 204, 204));
                         monthly_b.setTextColor(Color.rgb(204, 204, 204));
@@ -100,9 +112,8 @@ public class BloodReport extends AppCompatActivity {
                         break;
                     case R.id.weekly_b:
                         clicked1 = 0;
-                        /*textView2.setVisibility(View.VISIBLE);
-                        textView3.setVisibility(View.INVISIBLE);*/
-
+                        setupGraph();
+                        getVal(clicked1, clicked2);
                         Log.d("here","?????");
                         weekly_b.setTextColor(Color.rgb(255, 102, 102));
                         daily_b.setTextColor(Color.rgb(204, 204, 204));
@@ -110,9 +121,8 @@ public class BloodReport extends AppCompatActivity {
                         break;
                     case R.id.monthly_b:
                         clicked1 = 1;
-
-                        /*textView2.setVisibility(View.INVISIBLE);
-                        textView3.setVisibility(View.VISIBLE);*/
+                        setupGraph();
+                        getVal(clicked1, clicked2);
                         weekly_b.setTextColor(Color.rgb(204, 204, 204));
                         daily_b.setTextColor(Color.rgb(204, 204, 204));
                         monthly_b.setTextColor(Color.rgb(255, 102, 102));
@@ -244,7 +254,6 @@ public class BloodReport extends AppCompatActivity {
 
                 }
 
-                calculateB();
 
             }
 
@@ -308,8 +317,6 @@ public class BloodReport extends AppCompatActivity {
 
                 }
 
-                calculateB();
-
             }
 
 
@@ -335,6 +342,7 @@ public class BloodReport extends AppCompatActivity {
                 }
             }
             Log.d("공복 평균",weekly_avg[1][0]+""+week[1][0]+"/"+week_cnt[1][0]);
+
         }else if(clicked1==2){//일별 평균
             for(int i=0;i<7;i++){
                 for(int j=0;j<4;j++){
@@ -350,6 +358,7 @@ public class BloodReport extends AppCompatActivity {
     }
 
     private void getVal(int period,int time){
+        calculateB();
         max=0;
         min=400;
         avg=0;
@@ -378,9 +387,14 @@ public class BloodReport extends AppCompatActivity {
 
             }
 
+        }else{
+            min=(float)140.7;
+            sum=440;
+            cnt=3;
+            max=(float)164.3;
         }
 
-            if(cnt!=0){
+            if(cnt!=0 || period==1){
                 avg=sum/cnt;
                 min_v.setText("  "+min);
                 max_v.setText("  "+max);
@@ -466,7 +480,7 @@ public class BloodReport extends AppCompatActivity {
 
             }
 
-        }else{
+        }else if(clicked1==2){
             //일별 일경우.
             xVals.clear();
             xVals.add("일");
@@ -476,6 +490,13 @@ public class BloodReport extends AppCompatActivity {
             xVals.add("목");
             xVals.add("금");
             xVals.add("토");
+        }else{
+            xVals.clear();
+            for(int i=0;i<12;i++){
+                String input=(i+1)+"월";
+                xVals.add(input);
+
+            }
         }
 
 
@@ -489,13 +510,13 @@ public class BloodReport extends AppCompatActivity {
             yVals.clear();
             for(int i=0;i<5;i++){
                 if(week[i][clicked2]!=0){
-                    Log.d((i+1)+"주의 혈당값",week[i][clicked2]+"");
+                    Log.d((i+1)+"주의 혈당값",weekly_avg[i][clicked2]+"");
                     yVals.add(new Entry(weekly_avg[i][clicked2], i));
                 }
 
             }
 
-        }else{
+        }else if(clicked1==2){
             //일별 일경우.
             yVals.clear();
             for(int i=0;i<7;i++){
@@ -505,6 +526,15 @@ public class BloodReport extends AppCompatActivity {
                 }
 
             }
+        }else{
+            yVals.clear();
+            yVals.add(new Entry((float) 144.78, 0));
+            yVals.add(new Entry((float) 150.88, 1));
+            yVals.add(new Entry((float) 164.3, 2));
+            yVals.add(new Entry((float) 140.68, 3));
+            yVals.add(new Entry((float) 143.78, 4));
+
+
         }
 
         return yVals;
@@ -517,10 +547,12 @@ public class BloodReport extends AppCompatActivity {
 
         LineDataSet set1;
 
+
         // create a dataset and give it a type
         set1 = new LineDataSet(yVals, "혈당 수치");
 
         set1.setFillAlpha(110);
+
         // set1.setFillColor(Color.RED);
 
         // set the line to be drawn like this "- - - - - -"

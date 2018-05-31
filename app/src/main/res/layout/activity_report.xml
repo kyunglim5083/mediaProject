@@ -81,9 +81,21 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginBottom="46dp" >
+                android:layout_marginBottom="45dp" >
 
             </com.github.mikephil.charting.charts.LineChart>
+
+            <Button
+                android:id="@+id/report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/mybutton"
+                android:text="REPORT"
+                android:textColor="#FDF5E6"
+                android:textStyle="bold"/>
+
         </RelativeLayout>
 
     </FrameLayout>

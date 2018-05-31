@@ -64,6 +64,10 @@
             android:exported="true"></service>
 
         <activity android:name=".FoodActivity"></activity>
+
+        <activity android:name=".PopupActivity"
+            android:theme="@android:style/Theme.Dialog" />
+
     </application>
 
 </manifest>
